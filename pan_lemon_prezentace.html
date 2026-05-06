@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pan Lemon — Dopamine Design 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Black+Han+Sans&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --yellow: #FFDD00;
+    --black: #0A0A0A;
+    --white: #F5F5F0;
+    --red: #E8331C;
+    --shadow: 5px 5px 0 #000;
+  }
+
+  body {
+    background: var(--black);
+    font-family: 'Arial Black', 'Arial', sans-serif;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    user-select: none;
+  }
+
+  #presentation {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  /* ---- SLIDE BASE ---- */
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ---- IMAGE SLIDES ---- */
+  .slide-img img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* ---- CUSTOM INTRO SLIDES ---- */
+  .slide-custom {
+    flex-direction: column;
+    padding: 5vw;
+  }
+
+  /* === SLIDE 1: TITLE === */
+  .slide-title {
+    background: var(--yellow);
+  }
+  .slide-title .big-label {
+    font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
+    font-size: clamp(14px, 2.5vw, 28px);
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--black);
+    border: 3px solid var(--black);
+    padding: 6px 18px;
+    margin-bottom: 3vh;
+    display: inline-block;
+  }
+  .slide-title h1 {
+    font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
+    font-size: clamp(50px, 11vw, 140px);
+    line-height: 0.9;
+    color: var(--black);
+    text-transform: uppercase;
+    letter-spacing: -1px;
+  }
+  .slide-title h1 span {
+    color: var(--red);
+  }
+  .slide-title .subtitle {
+    font-family: 'Arial Black', Arial, sans-serif;
+    font-size: clamp(13px, 1.8vw, 20px);
+    color: var(--black);
+    margin-top: 3vh;
+    max-width: 70%;
+    line-height: 1.5;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-left: 6px solid var(--black);
+    padding-left: 16px;
+  }
+  .slide-title .corner-tag {
+    position: absolute;
+    bottom: 5vh;
+    right: 5vw;
+    font-size: clamp(12px, 1.4vw, 16px);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--black);
+    font-weight: 900;
+    opacity: 0.5;
+  }
+
+  /* === SLIDE 2: POTENCIÁL === */
+  .slide-potential {
+    background: var(--black);
+    align-items: flex-start;
+  }
+  .slide-potential .slide-header {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    margin-bottom: 4vh;
+  }
+  .slide-potential .slide-header h2 {
+    font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
+    font-size: clamp(50px, 9vw, 110px);
+    color: var(--yellow);
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .slide-potential .slide-header .tag {
+    font-size: clamp(11px, 1.2vw, 14px);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--yellow);
+    border: 2px solid var(--yellow);
+    padding: 4px 12px;
+    font-weight: 900;
+    opacity: 0.7;
+  }
+  .items-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(10px, 2vw, 22px);
+    width: 100%;
+  }
+  .pot-item {
+    border: 3px solid var(--yellow);
+    padding: clamp(10px, 2vw, 20px);
+    position: relative;
+  }
+  .pot-item .num {
+    font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
+    font-size: clamp(28px, 4vw, 52px);
+    color: var(--yellow);
+    opacity: 0.2;
+    line-height: 1;
+    position: absolute;
+    top: 8px;
+    right: 14px;
+  }
+  .pot-item h3 {
+    font-family: 'Arial Black', Arial, sans-serif;
+    font-size: clamp(11px, 1.4vw, 16px);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--yellow);
+    margin-bottom: 6px;
+    font-weight: 900;
+  }
+  .pot-item p {
+    font-size: clamp(10px, 1.1vw, 13px);
+    color: rgba(255,255,255,0.75);
+    line-height: 1.5;
+    font-weight: 400;
+    font-family: Arial, sans-serif;
+  }
+
+  /* === SLIDE 3: HROZBA === */
+  .slide-threat {
+    background: var(--red);
+    align-items: flex-start;
+  }
+  .slide-threat .slide-header h2 {
+    font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
+    font-size: clamp(50px, 9vw, 110px);
+    color: var(--black);
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 4vh;
+  }
+  .threat-list {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 1.8vh, 20px);
+    width: 100%;
+  }
+  .threat-item {
+    display: flex;
+    gap: clamp(12px, 2vw, 24px);
+    align-items: flex-start;
+    border-bottom: 2px solid rgba(0,0,0,0.25);
+    padding-bottom: clamp(8px, 1.5vh, 16px);
+  }
+  .threat-item:last-child { border-bottom: none; }
+  .threat-icon {
+    font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
+    font-size: clamp(24px, 3.5vw, 44px);
+    color: var(--black);
+    line-height: 1;
+    min-width: 3vw;
+    text-align: center;
+  }
+  .threat-text h3 {
+    font-family: 'Arial Black', Arial, sans-serif;
+    font-size: clamp(11px, 1.4vw, 16px);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--black);
+    font-weight: 900;
+    margin-bottom: 4px;
+  }
+  .threat-text p {
+    font-size: clamp(10px, 1.1vw, 13px);
+    color: rgba(0,0,0,0.7);
+    line-height: 1.5;
+    font-family: Arial, sans-serif;
+  }
+  .slide-threat .corner-tag {
+    position: absolute;
+    bottom: 5vh;
+    right: 5vw;
+    font-size: clamp(11px, 1.2vw, 14px);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.4);
+    font-weight: 900;
+  }
+
+  /* ---- CONTROLS ---- */
+  #controls {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 14px 24px;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+  }
+  body:hover #controls { opacity: 1; }
+
+  .ctrl-btn {
+    background: var(--yellow);
+    border: 3px solid #000;
+    color: #000;
+    font-family: 'Arial Black', Arial, sans-serif;
+    font-weight: 900;
+    font-size: 14px;
+    padding: 8px 20px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 3px 3px 0 #000;
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  .ctrl-btn:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 #000; }
+  .ctrl-btn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 #000; }
+
+  #slide-counter {
+    color: var(--yellow);
+    font-family: 'Arial Black', Arial, sans-serif;
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: 2px;
+    min-width: 80px;
+    text-align: center;
+    text-shadow: 2px 2px 0 #000;
+  }
+
+  #fullscreen-btn {
+    background: transparent;
+    border: 2px solid var(--yellow);
+    color: var(--yellow);
+    font-size: 18px;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+
+  #progress {
+    position: fixed;
+    bottom: 0; left: 0;
+    height: 4px;
+    background: var(--yellow);
+    transition: width 0.3s ease;
+    z-index: 200;
+    box-shadow: 0 0 8px var(--yellow);
+  }
+
+  #slide-pip {
+    position: fixed;
+    top: 16px; right: 20px;
+    color: rgba(255,255,255,0.35);
+    font-size: 11px;
+    font-family: 'Arial Black', Arial, sans-serif;
+    letter-spacing: 2px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+  }
+  body:hover #slide-pip { opacity: 1; }
+
+  #hint {
+    position: fixed;
+    bottom: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.25);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    animation: fadeHint 2s ease 4s forwards;
+    pointer-events: none;
+    z-index: 50;
+    white-space: nowrap;
+  }
+  @keyframes fadeHint { to { opacity: 0; } }
+</style>
+</head>
+<body>
+
+<div id="presentation">
+
+  <!-- ========= INTRO SLIDE 1: PROČ TUTO CESTU ========= -->
+  <div class="slide slide-custom slide-title active" id="slide-1">
+    <div class="big-label">Pan Lemon × feopatito studio</div>
+    <h1>PROČ<br><span>TUTO</span><br>CESTU.</h1>
+    <div class="subtitle">
+      Strategické zdůvodnění vizuálního a komunikačního směru značky Pan Lemon — Dopamine Design 2026
+    </div>
+    <div class="corner-tag">Klientská prezentace · 2026</div>
+  </div>
+
+  <!-- ========= INTRO SLIDE 2: POTENCIÁL ========= -->
+  <div class="slide slide-custom slide-potential" id="slide-2">
+    <div class="slide-header">
+      <h2>POTENCIÁL</h2>
+      <div class="tag">kde vidíme příležitost</div>
+    </div>
+    <div class="items-grid">
+      <div class="pot-item">
+        <div class="num">01</div>
+        <h3>Shelf war — vizuální dominance</h3>
+        <p>V přeplněném regálu bojuje každý produkt o pozornost stejně jako obsah na TikToku. Bold vizuál Dopamine Designu je záchytný bod, který zákazník zachytí dřív, než si to uvědomí.</p>
+      </div>
+      <div class="pot-item">
+        <div class="num">02</div>
+        <h3>Jazyk generace — autentická drzost</h3>
+        <p>Pan Lemon nemluví na zákazníka shora — mluví jak mu zobák narost. To je relatable. Autentická drzost funguje tam, kde korporátní motivace selže. „Ne, ty vole, tak víme svoje."</p>
+      </div>
+      <div class="pot-item">
+        <div class="num">03</div>
+        <h3>Biovirální packaging</h3>
+        <p>Sticker arch + packaging jako centerpiece. „Tenhle bordel pošlu do group chatu." Produkt se stává sdílitelným objektem — merch i packaging fungují jako ambient media bez mediálního budgetu.</p>
+      </div>
+      <div class="pot-item">
+        <div class="num">04</div>
+        <h3>Social media miniseries</h3>
+        <p>Organic content, který žije sám o sobě — Pimp My Bathroom, rychlá uklízení, komunitní storytelling. Série buduje třetí digitální prostor pro značku a komunitu kolem ní.</p>
+      </div>
+      <div class="pot-item">
+        <div class="num">05</div>
+        <h3>Cross-generační nostalgie</h3>
+        <p>90s estetika nefunguje jen na Gen Z. Funguje napříč generacemi (Lidl, Granko, prací prostředky). Pan Lemon ji přetavuje v 2026 energii — nejde o kopii, jde o nový život starého jádra.</p>
+      </div>
+      <div class="pot-item">
+        <div class="num">06</div>
+        <h3>Komfort, ne tlak</h3>
+        <p>Mladí lidi prahnou po bezpečí. Pan Lemon nabízí komfort sebou samým — „chceš uklidit, ale nechce se ti a víme to oba." To je motivace bez guilt-tripu. A právě ta funguje.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= INTRO SLIDE 3: HROZBA ========= -->
+  <div class="slide slide-custom slide-threat" id="slide-3">
+    <div class="slide-header">
+      <h2>HROZBA.</h2>
+    </div>
+    <div class="threat-list">
+      <div class="threat-item">
+        <div class="threat-icon">01</div>
+        <div class="threat-text">
+          <h3>Tónová přesnost — hranice je tenká</h3>
+          <p>Mezi „relatable drzostí" a „tlačením na zákazníka" je jeden špatný copyline. Komunikace musí mluvit jejich řečí — ne jim říkat, co mají dělat. Záměrně jsme přešli od tvrdší strategie k jemnější. Tenhle posun je klíčový a musíme ho udržet konzistentní.</p>
+        </div>
+      </div>
+      <div class="threat-item">
+        <div class="threat-icon">02</div>
+        <div class="threat-text">
+          <h3>Konzistence — Clean Freak vs. nehrotit</h3>
+          <p>Brand positioning musí být jednotný. Pokud část komunikace říká „baví tě uklízet" (Clean Freak) a část říká „víme, že se ti nechce" (nehrotit), posíláme zákazníkovi protichůdný signál. Jeden hlas, jedna pravda.</p>
+        </div>
+      </div>
+      <div class="threat-item">
+        <div class="threat-icon">03</div>
+        <div class="threat-text">
+          <h3>Copycat risk — Dopamine Design je trend</h3>
+          <p>90s estetika + bold vizuál není exkluzivní territory. Jsme tam první a nejautentičtější — ale jen dokud to tak vypadá. Každý vizuální nebo komunikační kompromis nás přibližuje ke generické verzi toho, co jsme chtěli být.</p>
+        </div>
+      </div>
+      <div class="threat-item">
+        <div class="threat-icon">04</div>
+        <div class="threat-text">
+          <h3>Technická popsatelnost brandového systému</h3>
+          <p>Klient bude chtít vědět: proč je to zde, proč tohle, proč takto. Intuitivní rozhodnutí musíme umět racionálně popsat — od umístění loga po systém symboliky v nálepkách. Brandový manuál není volitelný.</p>
+        </div>
+      </div>
+    </div>
+    <div class="corner-tag">feopatito studio · 2026</div>
+  </div>
+
+  <!-- ========= PDF SLIDES 1–25 ========= -->
+</div>
+
+<div id="progress"></div>
+<div id="slide-pip">1 / 28</div>
+
+<div id="controls">
+  <button class="ctrl-btn" onclick="changeSlide(-1)">← BACK</button>
+  <span id="slide-counter">1 / 28</span>
+  <button class="ctrl-btn" onclick="changeSlide(1)">NEXT →</button>
+  <button id="fullscreen-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+</div>
+
+<div id="hint">← → navigace &nbsp;·&nbsp; F fullscreen &nbsp;·&nbsp; Klik pro posun</div>
+
+<script>
+const PDF_SLIDES = 25;
+const INTRO_SLIDES = 3;
+const TOTAL = INTRO_SLIDES + PDF_SLIDES;
+
+// Build PDF slides
+const pres = document.getElementById('presentation');
+for (let i = 1; i <= PDF_SLIDES; i++) {
+  const num = String(i).padStart(2, '0');
+  const div = document.createElement('div');
+  div.className = 'slide slide-img';
+  div.id = 'slide-' + (INTRO_SLIDES + i);
+  const img = document.createElement('img');
+  img.src = 'slides/page-' + num + '.jpg';
+  img.alt = 'Slide ' + (INTRO_SLIDES + i);
+  img.loading = i <= 2 ? 'eager' : 'lazy';
+  div.appendChild(img);
+  pres.appendChild(div);
+}
+
+let current = 0;
+
+function updateUI() {
+  document.querySelectorAll('.slide').forEach((s, i) => {
+    s.classList.toggle('active', i === current);
+  });
+  const n = current + 1;
+  document.getElementById('slide-counter').textContent = n + ' / ' + TOTAL;
+  document.getElementById('slide-pip').textContent = String(n).padStart(2,'0') + ' / ' + TOTAL;
+  document.getElementById('progress').style.width = ((n / TOTAL) * 100) + '%';
+}
+
+function changeSlide(dir) {
+  const next = current + dir;
+  if (next < 0 || next >= TOTAL) return;
+  current = next;
+  updateUI();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); changeSlide(-1); }
+  if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+  if (e.key === 'Home') { current = 0; updateUI(); }
+  if (e.key === 'End') { current = TOTAL-1; updateUI(); }
+});
+
+let touchX = 0;
+document.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (Math.abs(dx) > 50) changeSlide(dx < 0 ? 1 : -1);
+});
+
+document.getElementById('presentation').addEventListener('click', e => {
+  const tag = e.target.tagName;
+  if (tag === 'IMG' || tag === 'DIV') {
+    if (e.clientX < window.innerWidth / 2) changeSlide(-1);
+    else changeSlide(1);
+  }
+});
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+  else document.exitFullscreen();
+}
+
+updateUI();
+</script>
+</body>
+</html>
