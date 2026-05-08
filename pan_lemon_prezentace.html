@@ -909,7 +909,7 @@
 </div>
 
 <div id="progress"></div>
-<div id="slide-pip">1 / 30</div>
+<div id="slide-pip">1 / 31</div>
 
 <div id="controls">
   <button class="ctrl-btn" onclick="changeSlide(-1)">← BACK</button>
@@ -993,16 +993,17 @@ function updateUI() {
   document.getElementById('slide-counter').textContent = n + ' / ' + TOTAL;
   document.getElementById('slide-pip').textContent = String(n).padStart(2,'0') + ' / ' + TOTAL;
   document.getElementById('progress').style.width = ((n / TOTAL) * 100) + '%';
-  // Handle video autoplay
-  const videoEl = document.querySelector('#slide-20 video');
-  if (videoEl) {
-    if (current === VIDEO_SLIDE_INDEX) {
-      videoEl.currentTime = 0;
-      videoEl.play().catch(() => {});
+  // Handle all video slides
+  document.querySelectorAll('.slide-video video').forEach(v => {
+    const slideDiv = v.closest('.slide');
+    const slideIdx = Array.from(document.querySelectorAll('.slide')).indexOf(slideDiv);
+    if (slideIdx === current) {
+      v.currentTime = 0;
+      v.play().catch(() => {});
     } else {
-      videoEl.pause();
+      v.pause();
     }
-  }
+  });
 }
 
 function changeSlide(dir) {
