@@ -942,8 +942,15 @@ const slideConfig = [
   ...Array.from({length:6}, (_,i) => ({type:'img', src:`slides/page-${String(i+17).padStart(2,'0')}.jpg`})),
   // slide 29: video mezi 28 a 29
   {type:'video', src:'slides/video3.mp4'},
-  // slides 30–32: page-23 to page-25
-  ...Array.from({length:3}, (_,i) => ({type:'img', src:`slides/page-${String(i+23).padStart(2,'0')}.jpg`})),
+  // slides 30–31: page-23 to page-24
+  {type:'img', src:'slides/page-23.jpg'},
+  {type:'img', src:'slides/page-24.jpg'},
+  // slide 32: video tričko
+  {type:'video', src:'slides/video4.mp4'},
+  // slide 33: duplikát slide 31 (page-24)
+  {type:'img', src:'slides/page-24b.jpg'},
+  // slide 34: page-25
+  {type:'img', src:'slides/page-25.jpg'},
 ];
 
 const TOTAL = CUSTOM_SLIDES + slideConfig.length; // 6 + 25 = 31
