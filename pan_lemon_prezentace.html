@@ -921,70 +921,58 @@
 <div id="hint">← → navigace &nbsp;·&nbsp; F fullscreen &nbsp;·&nbsp; Klik pro posun</div>
 
 <script>
-// 6 custom HTML slides + 13 image slides (page-03 to page-15) + 1 video slide + 9 image slides (page-17 to page-25)
-// TOTAL = 29 slides
-
+// === SLIDE CONFIG ===
+// 6 custom HTML slides already in DOM
+// Dynamic slides built below
 const CUSTOM_SLIDES = 6;
-const VIDEO_SLIDE_INDEX = 19; // 0-based = slide 20
-const TOTAL = 30;
 
-// Build image slides page-03 to page-15 (slides 7-19)
-const pres = document.getElementById('presentation');
-for (let i = 3; i <= 15; i++) {
-  const num = String(i).padStart(2, '0');
-  const slideIndex = CUSTOM_SLIDES + (i - 3 + 1);
-  const div = document.createElement('div');
-  div.className = 'slide slide-img';
-  div.id = 'slide-' + slideIndex;
-  const img = document.createElement('img');
-  img.src = 'slides/page-' + num + '.jpg';
-  img.alt = 'Slide ' + slideIndex;
-  img.loading = (i - 3) < 2 ? 'eager' : 'lazy';
-  div.appendChild(img);
-  pres.appendChild(div);
-}
+const slideConfig = [
+  // slides 7–17: page-03 to page-13
+  ...Array.from({length:11}, (_,i) => ({type:'img', src:`slides/page-${String(i+3).padStart(2,'0')}.jpg`})),
+  // slide 18: video
+  {type:'video', src:'slides/video2.mp4'},
+  // slides 19–20: page-14 to page-15
+  {type:'img', src:'slides/page-14.jpg'},
+  {type:'img', src:'slides/page-15.jpg'},
+  // slide 21: packaging video (auto-advance)
+  {type:'video', src:'slides/packaging.mp4'},
+  // slide 22: packaging-box photo
+  {type:'img', src:'slides/packaging-box.jpg'},
+  // slides 23–31: page-17 to page-25
+  ...Array.from({length:9}, (_,i) => ({type:'img', src:`slides/page-${String(i+17).padStart(2,'0')}.jpg`})),
+];
 
-// Video slide 20
-const videoDiv = document.createElement('div');
-videoDiv.className = 'slide slide-video';
-videoDiv.id = 'slide-20';
-const vid = document.createElement('video');
-vid.src = 'slides/packaging.mp4';
-vid.muted = true;
-vid.playsInline = true;
-vid.setAttribute('playsinline', '');
-vid.preload = 'auto';
-videoDiv.appendChild(vid);
-pres.appendChild(videoDiv);
-
-// Slide 21: packaging-box photo (after video)
-const boxDiv = document.createElement('div');
-boxDiv.className = 'slide slide-img';
-boxDiv.id = 'slide-21';
-const boxImg = document.createElement('img');
-boxImg.src = 'slides/packaging-box.jpg';
-boxImg.alt = 'Slide 21';
-boxImg.loading = 'lazy';
-boxDiv.appendChild(boxImg);
-pres.appendChild(boxDiv);
-
-// Build image slides page-17 to page-25 (slides 22-30)
-for (let i = 17; i <= 25; i++) {
-  const num = String(i).padStart(2, '0');
-  const slideIndex = CUSTOM_SLIDES + 15 + (i - 17 + 1);
-  const div = document.createElement('div');
-  div.className = 'slide slide-img';
-  div.id = 'slide-' + slideIndex;
-  const img = document.createElement('img');
-  img.src = 'slides/page-' + num + '.jpg';
-  img.alt = 'Slide ' + slideIndex;
-  img.loading = 'lazy';
-  div.appendChild(img);
-  pres.appendChild(div);
-}
-
+const TOTAL = CUSTOM_SLIDES + slideConfig.length; // 6 + 25 = 31
 let current = 0;
 
+// Build dynamic slides
+const pres = document.getElementById('presentation');
+slideConfig.forEach((cfg, idx) => {
+  const slideNum = CUSTOM_SLIDES + idx + 1;
+  const div = document.createElement('div');
+  div.id = 'slide-' + slideNum;
+  if (cfg.type === 'img') {
+    div.className = 'slide slide-img';
+    const img = document.createElement('img');
+    img.src = cfg.src;
+    img.alt = 'Slide ' + slideNum;
+    img.loading = idx < 2 ? 'eager' : 'lazy';
+    div.appendChild(img);
+  } else if (cfg.type === 'video') {
+    div.className = 'slide slide-video';
+    const vid = document.createElement('video');
+    vid.src = cfg.src;
+    vid.muted = true;
+    vid.playsInline = true;
+    vid.setAttribute('playsinline', '');
+    vid.preload = 'auto';
+    vid.addEventListener('ended', () => changeSlide(1));
+    div.appendChild(vid);
+  }
+  pres.appendChild(div);
+});
+
+// === UI ===
 function updateUI() {
   document.querySelectorAll('.slide').forEach((s, i) => {
     s.classList.toggle('active', i === current);
@@ -993,10 +981,12 @@ function updateUI() {
   document.getElementById('slide-counter').textContent = n + ' / ' + TOTAL;
   document.getElementById('slide-pip').textContent = String(n).padStart(2,'0') + ' / ' + TOTAL;
   document.getElementById('progress').style.width = ((n / TOTAL) * 100) + '%';
-  // Handle all video slides
+
+  // Video autoplay management
   document.querySelectorAll('.slide-video video').forEach(v => {
-    const slideDiv = v.closest('.slide');
-    const slideIdx = Array.from(document.querySelectorAll('.slide')).indexOf(slideDiv);
+    const parentSlide = v.closest('.slide');
+    const allSlides = Array.from(document.querySelectorAll('.slide'));
+    const slideIdx = allSlides.indexOf(parentSlide);
     if (slideIdx === current) {
       v.currentTime = 0;
       v.play().catch(() => {});
@@ -1013,6 +1003,7 @@ function changeSlide(dir) {
   updateUI();
 }
 
+// Keyboard
 document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
   if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); changeSlide(-1); }
@@ -1021,6 +1012,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'End') { current = TOTAL-1; updateUI(); }
 });
 
+// Touch
 let touchX = 0;
 document.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
 document.addEventListener('touchend', e => {
@@ -1028,6 +1020,7 @@ document.addEventListener('touchend', e => {
   if (Math.abs(dx) > 50) changeSlide(dx < 0 ? 1 : -1);
 });
 
+// Click navigation
 document.getElementById('presentation').addEventListener('click', e => {
   const tag = e.target.tagName;
   if (tag === 'IMG' || tag === 'DIV') {
@@ -1036,10 +1029,12 @@ document.getElementById('presentation').addEventListener('click', e => {
   }
 });
 
+// Fullscreen
 function toggleFullscreen() {
   if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
   else document.exitFullscreen();
 }
+document.getElementById('fullscreen-btn').addEventListener('click', toggleFullscreen);
 
 updateUI();
 </script>
