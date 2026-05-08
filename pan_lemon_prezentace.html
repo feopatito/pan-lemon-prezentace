@@ -554,6 +554,19 @@
     text-align: center;
     line-height: 1.1;
   }
+  /* VIDEO SLIDE */
+  .slide-video {
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .slide-video video {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
   /* VS TABLE */
   .vs-table-wrap {
     flex: 1;
@@ -908,28 +921,53 @@
 <div id="hint">← → navigace &nbsp;·&nbsp; F fullscreen &nbsp;·&nbsp; Klik pro posun</div>
 
 <script>
-// 4 intro slides + 2 dopamine HTML slides = 6 custom slides
-// then image slides from page-03 to page-25 = 23 image slides
+// 6 custom HTML slides + 13 image slides (page-03 to page-15) + 1 video slide + 9 image slides (page-17 to page-25)
 // TOTAL = 29 slides
 
 const CUSTOM_SLIDES = 6;
-const IMG_START = 3;   // start from page-03
-const IMG_END = 25;    // end at page-25
-const PDF_SLIDES = IMG_END - IMG_START + 1; // 23
-const TOTAL = CUSTOM_SLIDES + PDF_SLIDES;  // 29
+const VIDEO_SLIDE_INDEX = 19; // 0-based = slide 20
+const TOTAL = 29;
 
-// Build image slides (page-03 to page-25)
+// Build image slides page-03 to page-15 (slides 7-19)
 const pres = document.getElementById('presentation');
-for (let i = IMG_START; i <= IMG_END; i++) {
+for (let i = 3; i <= 15; i++) {
   const num = String(i).padStart(2, '0');
-  const slideIndex = CUSTOM_SLIDES + (i - IMG_START + 1);
+  const slideIndex = CUSTOM_SLIDES + (i - 3 + 1);
   const div = document.createElement('div');
   div.className = 'slide slide-img';
   div.id = 'slide-' + slideIndex;
   const img = document.createElement('img');
   img.src = 'slides/page-' + num + '.jpg';
   img.alt = 'Slide ' + slideIndex;
-  img.loading = (i - IMG_START) < 2 ? 'eager' : 'lazy';
+  img.loading = (i - 3) < 2 ? 'eager' : 'lazy';
+  div.appendChild(img);
+  pres.appendChild(div);
+}
+
+// Video slide 20
+const videoDiv = document.createElement('div');
+videoDiv.className = 'slide slide-video';
+videoDiv.id = 'slide-20';
+const vid = document.createElement('video');
+vid.src = 'slides/packaging.mp4';
+vid.muted = true;
+vid.playsInline = true;
+vid.setAttribute('playsinline', '');
+vid.preload = 'auto';
+videoDiv.appendChild(vid);
+pres.appendChild(videoDiv);
+
+// Build image slides page-17 to page-25 (slides 21-29)
+for (let i = 17; i <= 25; i++) {
+  const num = String(i).padStart(2, '0');
+  const slideIndex = CUSTOM_SLIDES + 14 + (i - 17 + 1);
+  const div = document.createElement('div');
+  div.className = 'slide slide-img';
+  div.id = 'slide-' + slideIndex;
+  const img = document.createElement('img');
+  img.src = 'slides/page-' + num + '.jpg';
+  img.alt = 'Slide ' + slideIndex;
+  img.loading = 'lazy';
   div.appendChild(img);
   pres.appendChild(div);
 }
@@ -944,6 +982,16 @@ function updateUI() {
   document.getElementById('slide-counter').textContent = n + ' / ' + TOTAL;
   document.getElementById('slide-pip').textContent = String(n).padStart(2,'0') + ' / ' + TOTAL;
   document.getElementById('progress').style.width = ((n / TOTAL) * 100) + '%';
+  // Handle video autoplay
+  const videoEl = document.querySelector('#slide-20 video');
+  if (videoEl) {
+    if (current === VIDEO_SLIDE_INDEX) {
+      videoEl.currentTime = 0;
+      videoEl.play().catch(() => {});
+    } else {
+      videoEl.pause();
+    }
+  }
 }
 
 function changeSlide(dir) {
