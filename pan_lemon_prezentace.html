@@ -552,6 +552,49 @@
     text-align: center;
     line-height: 1.1;
   }
+  /* VS TABLE */
+  .vs-table-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0 4vw;
+  }
+  .vs-table {
+    width: 100%;
+    max-width: 900px;
+    border-collapse: collapse;
+  }
+  .vs-table tr {
+    border-bottom: 2px solid rgba(255,221,0,0.15);
+  }
+  .vs-table tr:last-child { border-bottom: none; }
+  .vs-table td {
+    padding: clamp(10px, 1.8vh, 20px) clamp(12px, 2vw, 28px);
+    font-family: 'Arial Black', Arial, sans-serif;
+    font-size: clamp(13px, 1.5vw, 20px);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .cell-90s {
+    text-align: right;
+    color: rgba(255,221,0,0.6);
+    width: 42%;
+  }
+  .cell-vs {
+    text-align: center;
+    font-size: clamp(18px, 2vw, 28px) !important;
+    width: 16%;
+    opacity: 0.7;
+  }
+  .cell-2026 {
+    text-align: left;
+    color: #F5F5F0;
+    width: 42%;
+  }
+
   .slide-90s .bridge-footer .bf-text em {
     font-style: normal;
     color: var(--yellow);
@@ -815,69 +858,31 @@
       <div class="vs-badge">VS</div>
       <div class="title-90">ROK 2026</div>
     </div>
-    <div class="split-body">
-      <div class="split-col col-90s">
-        <div class="col-label">Devadesátky — odkud přicházíme</div>
-        <div class="trait-row">
-          <div class="trait-icon">🎨</div>
-          <div class="trait-text">
-            <strong>Razivé barvy, bold fonty, silné stíny</strong>
-            <span>Vrchol konzumního marketingu před ekonomickým zlomem. Vizuál jako šok.</span>
-          </div>
-        </div>
-        <div class="trait-row">
-          <div class="trait-icon">📺</div>
-          <div class="trait-text">
-            <strong>Svět bez sociálních médií</strong>
-            <span>Méně informací, méně stimulů. Sféra bezpečnější, přehlednější. Lidé prahli po jiných věcech.</span>
-          </div>
-        </div>
-        <div class="trait-row">
-          <div class="trait-icon">😌</div>
-          <div class="trait-text">
-            <strong>Komfort a bezpečí jako standard</strong>
-            <span>Seriál Přátelé, jednoduché produkty, jasné hodnoty. Věci byly přehledné.</span>
-          </div>
-        </div>
-        <div class="trait-row">
-          <div class="trait-icon">🏆</div>
-          <div class="trait-text">
-            <strong>Nostalgie bez přímé zkušenosti</strong>
-            <span>Dnešní mladí 90ky nezažili — znají je z fotek, rodičů, filmů. Přesto je přitahují.</span>
-          </div>
-        </div>
-      </div>
-      <div class="split-col col-2026">
-        <div class="col-label">Rok 2026 — kam směřujeme</div>
-        <div class="trait-row">
-          <div class="trait-icon">📱</div>
-          <div class="trait-text">
-            <strong>Dopaminová přetíženost</strong>
-            <span>TikTok, Instagram, neustálý boj o pozornost. Vizuální dopamin = přežití v přeplněném světě.</span>
-          </div>
-        </div>
-        <div class="trait-row">
-          <div class="trait-icon">⚡</div>
-          <div class="trait-text">
-            <strong>Bold jako přirozený jazyk</strong>
-            <span>Mladí jsou na silný, přímý vizuál nastavení konzumací médií. Je to jejich mateřský jazyk.</span>
-          </div>
-        </div>
-        <div class="trait-row">
-          <div class="trait-icon">🔒</div>
-          <div class="trait-text">
-            <strong>Prahnutí po bezpečí a komfortu</strong>
-            <span>Mladí hledají záchytné body. Proto se vztahují k 90kám — ne pro nostalgii, ale pro pocit bezpečí.</span>
-          </div>
-        </div>
-        <div class="trait-row">
-          <div class="trait-icon">🚀</div>
-          <div class="trait-text">
-            <strong>Nový život starého jádra</strong>
-            <span>Nejde o kopii 90ek. Jde o přetavení toho, co fungovalo, do energie roku 2026.</span>
-          </div>
-        </div>
-      </div>
+    <div class="vs-table-wrap">
+      <table class="vs-table">
+        <tbody>
+          <tr>
+            <td class="cell-90s">Razivé barvy, bold fonty</td>
+            <td class="cell-vs">🎨</td>
+            <td class="cell-2026">Dopaminový vizuál</td>
+          </tr>
+          <tr>
+            <td class="cell-90s">Svět bez sociálních médií</td>
+            <td class="cell-vs">📺</td>
+            <td class="cell-2026">Přetíženost TikTokem</td>
+          </tr>
+          <tr>
+            <td class="cell-90s">Komfort a bezpečí</td>
+            <td class="cell-vs">😌</td>
+            <td class="cell-2026">Prahnutí po záchytných bodech</td>
+          </tr>
+          <tr>
+            <td class="cell-90s">Přehledný svět</td>
+            <td class="cell-vs">🏆</td>
+            <td class="cell-2026">Bold jako mateřský jazyk</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div class="bridge-footer">
       <div class="bf-text">PAN LEMON PROPOJUJE OBOJE —<br><em>NOSTALGIE + DOPAMIN + POHYB DOPŘEDU</em></div>
