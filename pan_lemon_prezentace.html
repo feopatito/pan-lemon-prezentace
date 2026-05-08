@@ -909,11 +909,11 @@
 </div>
 
 <div id="progress"></div>
-<div id="slide-pip">1 / 29</div>
+<div id="slide-pip">1 / 30</div>
 
 <div id="controls">
   <button class="ctrl-btn" onclick="changeSlide(-1)">← BACK</button>
-  <span id="slide-counter">1 / 29</span>
+  <span id="slide-counter">1 / 30</span>
   <button class="ctrl-btn" onclick="changeSlide(1)">NEXT →</button>
   <button id="fullscreen-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
 </div>
@@ -926,7 +926,7 @@
 
 const CUSTOM_SLIDES = 6;
 const VIDEO_SLIDE_INDEX = 19; // 0-based = slide 20
-const TOTAL = 29;
+const TOTAL = 30;
 
 // Build image slides page-03 to page-15 (slides 7-19)
 const pres = document.getElementById('presentation');
@@ -957,10 +957,21 @@ vid.preload = 'auto';
 videoDiv.appendChild(vid);
 pres.appendChild(videoDiv);
 
-// Build image slides page-17 to page-25 (slides 21-29)
+// Slide 21: packaging-box photo (after video)
+const boxDiv = document.createElement('div');
+boxDiv.className = 'slide slide-img';
+boxDiv.id = 'slide-21';
+const boxImg = document.createElement('img');
+boxImg.src = 'slides/packaging-box.jpg';
+boxImg.alt = 'Slide 21';
+boxImg.loading = 'lazy';
+boxDiv.appendChild(boxImg);
+pres.appendChild(boxDiv);
+
+// Build image slides page-17 to page-25 (slides 22-30)
 for (let i = 17; i <= 25; i++) {
   const num = String(i).padStart(2, '0');
-  const slideIndex = CUSTOM_SLIDES + 14 + (i - 17 + 1);
+  const slideIndex = CUSTOM_SLIDES + 15 + (i - 17 + 1);
   const div = document.createElement('div');
   div.className = 'slide slide-img';
   div.id = 'slide-' + slideIndex;
